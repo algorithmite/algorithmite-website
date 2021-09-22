@@ -11,7 +11,11 @@ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo apt install postgresql
 
+/* "algorithmite" as used below is the database name created in postgres which must be matched in Rocket.toml */
+
 sudo -u postgres createdb algorithmite
+
+/* "testuser" as used below is the user account used by the application to access the database which must be matched in Rocket.toml */
 
 sudo -u postgres psql algorithmite
 # CREATE USER testuser;

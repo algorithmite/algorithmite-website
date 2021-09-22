@@ -1,5 +1,5 @@
 [global.databases]
-scribblite = { url = "postgres://testuser:password@localhost/algorithmite" }
+algorithmite = { url = "postgres://testuser:password@localhost/algorithmite" }
 
 [development]
 address = "localhost"
