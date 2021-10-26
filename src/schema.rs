@@ -17,7 +17,7 @@ table! {
         moderator -> Int4,
         actor -> Int4,
         pre_action_role -> Int4,
-        action -> Moderation_action_types,
+        moderation_action -> Moderation_action_types,
         created_at -> Timestamp,
     }
 }
@@ -50,8 +50,8 @@ table! {
 table! {
     roles (role_key) {
         role_key -> Int4,
-        name -> Varchar,
-        level -> Int4,
+        role_name -> Varchar,
+        role_level -> Int4,
         can_edit_pages -> Bool,
         can_edit_posts -> Bool,
         can_edit_roles -> Bool,
@@ -78,7 +78,7 @@ table! {
         user_action_key -> Int4,
         actor -> Int4,
         ip -> Nullable<Inet>,
-        action -> User_action_types,
+        user_action -> User_action_types,
         created_at -> Timestamp,
     }
 }
@@ -86,10 +86,10 @@ table! {
 table! {
     users (user_key) {
         user_key -> Int4,
-        role -> Int4,
+        user_role -> Int4,
         username -> Varchar,
         email -> Text,
-        hash -> Text,
+        password_hash -> Text,
         created_at -> Timestamp,
         updated_at -> Timestamp,
         deleted_at -> Nullable<Timestamp>,
@@ -103,7 +103,7 @@ joinable!(pages -> routes (url_route));
 joinable!(posts -> routes (url_route));
 joinable!(posts -> users (author));
 joinable!(user_actions -> users (actor));
-joinable!(users -> roles (role));
+joinable!(users -> roles (user_role));
 
 allow_tables_to_appear_in_same_query!(
     comments,
