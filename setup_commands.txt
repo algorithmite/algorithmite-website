@@ -25,5 +25,7 @@ sudo -u postgres psql algorithmite
 sudo apt install libpq-dev
 cargo install diesel_cli --no-default-features --features postgres
 
+deisel migration run
+
 sudo apt update
 sudo apt upgrade
