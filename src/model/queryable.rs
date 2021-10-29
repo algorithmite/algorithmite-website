@@ -1,4 +1,24 @@
 use chrono::NaiveDateTime;
+use super::model_enums::{UserActionTypes,ModerationActionTypes};
+
+#[derive(Queryable)]
+pub struct UserActions {
+    pub user_action_key: i32,
+    pub actor: i32,
+    pub ip: String,
+    pub user_action: UserActionTypes,
+    pub created_at: NaiveDateTime
+}
+
+#[derive(Queryable)]
+pub struct ModerationActions {
+    pub moderation_action_key: i32,
+    pub moderator: i32,
+    pub actor: i32,
+    pub pre_action_role: i32,
+    pub moderation_action: ModerationActionTypes,
+    pub created_at: NaiveDateTime
+}
 
 #[derive(Queryable)]
 pub struct Routes {
@@ -35,8 +55,6 @@ pub struct Users {
     pub updated_at: NaiveDateTime,
     pub deleted_at: NaiveDateTime
 }
-
-
 
 #[derive(Queryable)]
 pub struct Posts {

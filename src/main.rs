@@ -2,10 +2,9 @@
 #[macro_use] extern crate diesel;
 #[macro_use] extern crate diesel_derive_enum;
 extern crate chrono;
-use rocket_sync_db_pools::{database};
+//use rocket_sync_db_pools::{database};
 //pub mod schema;
-pub mod models;
-pub mod action_schema;
+pub mod model;
 
 #[get("/")]
 fn index() -> &'static str {
