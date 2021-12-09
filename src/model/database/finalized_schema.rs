@@ -13,7 +13,7 @@ table! {
 
 // Add imports and proper enum type
 table! {
-    use crate::model::model_enums::ModerationActionTypesMapping;
+    use crate::model::database::model_enums::ModerationActionTypesMapping;
     use diesel::sql_types::{Int4, Timestamp};
     moderation_actions (moderation_action_key) {
         moderation_action_key -> Int4,
@@ -78,7 +78,7 @@ table! {
 
 // Add imports and proper enum type
 table! {
-    use crate::model::model_enums::UserActionTypesMapping;
+    use crate::model::database::model_enums::UserActionTypesMapping;
     use diesel::sql_types::{Int4, Inet, Timestamp, Nullable};
     user_actions (user_action_key) {
         user_action_key -> Int4,

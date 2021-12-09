@@ -63,6 +63,7 @@ dependencies = [
  "chrono",
  "diesel",
  "diesel-derive-enum",
+ "ipnetwork",
  "rocket",
  "rocket_dyn_templates",
  "rocket_sync_db_pools",
@@ -346,6 +347,8 @@ dependencies = [
  "byteorder",
  "chrono",
  "diesel_derives",
+ "ipnetwork",
+ "libc",
  "pq-sys",
  "r2d2",
 ]
@@ -826,6 +829,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b2b3ea6ff95e175473f8ffe6a7eb7c00d054240321b84c57051175fe3c1e075e"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "ipnetwork"
+version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4088d739b183546b239688ddbc79891831df421773df95e236daf7867866d355"
+dependencies = [
+ "serde",
 ]
 
 [[package]]

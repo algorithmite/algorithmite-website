@@ -6,10 +6,11 @@ edition = "2018"
 
 [dependencies]
 rocket = { version = "0.5.0-rc.1", features = ["secrets"] }
-diesel = { version = "1.4", features = ["chrono"] }
+diesel = { version = "1.4", features = ["chrono", "network-address"] }
 diesel-derive-enum = { version = "1.1", features = ["postgres"] }
 serde = { version = "1.0", features = ["derive"] }
 chrono = "0.4"
+ipnetwork = "0.18"
 
 [dependencies.rocket_sync_db_pools]
 version = "0.1.0-rc.1"
