@@ -2,9 +2,11 @@
 #[macro_use] extern crate diesel;
 #[macro_use] extern crate diesel_derive_enum;
 extern crate chrono;
-//use rocket_sync_db_pools::{database};
-//pub mod schema;
+use rocket_sync_db_pools::{database};
 pub mod model;
+
+#[database("algorithmite")]
+struct AlgorithmiteDbConn(diesel::PgConnection);
 
 #[get("/")]
 fn index() -> &'static str {
@@ -13,5 +15,5 @@ fn index() -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+    rocket::build().mount("/", routes![index]).attach(AlgorithmiteDbConn::fairing())
 }
