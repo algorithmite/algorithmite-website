@@ -1,8 +1,8 @@
 use chrono::NaiveDateTime;
-use super::model_enums::{UserActionTypes,ModerationActionTypes};
+use crate::model::database::{model_enums::{UserActionTypes,ModerationActionTypes}, finalized_schema::{comments, moderation_actions, pages, posts, roles, routes, user_actions, users}};
 
-#[derive(Queryable)]
-pub struct UserActions {
+#[derive(Queryable, Identifiable)]
+pub struct UserAction {
     pub id: i32,
     pub actor: i32,
     pub ip: String,
@@ -10,8 +10,8 @@ pub struct UserActions {
     pub created_at: NaiveDateTime
 }
 
-#[derive(Queryable)]
-pub struct ModerationActions {
+#[derive(Queryable, Identifiable)]
+pub struct ModerationAction {
     pub id: i32,
     pub moderator: i32,
     pub actor: i32,
@@ -20,15 +20,15 @@ pub struct ModerationActions {
     pub created_at: NaiveDateTime
 }
 
-#[derive(Queryable)]
-pub struct Routes {
+#[derive(Queryable, Identifiable)]
+pub struct Route {
     pub id: i32,
     pub parent: i32,
     pub url_slug: String
 }
 
-#[derive(Queryable)]
-pub struct Roles {
+#[derive(Queryable, Identifiable)]
+pub struct Role {
     pub id: i32,
     pub role_name: String,
     pub role_level: i32,
@@ -44,8 +44,8 @@ pub struct Roles {
     pub updated_at: NaiveDateTime
 }
 
-#[derive(Queryable)]
-pub struct Users {
+#[derive(Queryable, Identifiable)]
+pub struct User {
     pub id: i32,
     pub user_role: i32,
     pub username: String,
@@ -56,8 +56,8 @@ pub struct Users {
     pub deleted_at: NaiveDateTime
 }
 
-#[derive(Queryable)]
-pub struct Posts {
+#[derive(Queryable, Identifiable)]
+pub struct Post {
     pub id: i32,
     pub url_route: i32,
     pub author: i32,
@@ -69,8 +69,8 @@ pub struct Posts {
     pub deleted_at: NaiveDateTime
 }
 
-#[derive(Queryable)]
-pub struct Pages {
+#[derive(Queryable, Identifiable)]
+pub struct Page {
     pub id: i32,
     pub url_route: i32,
     pub template_location: String,
@@ -79,8 +79,8 @@ pub struct Pages {
     pub deleted_at: NaiveDateTime
 }
 
-#[derive(Queryable)]
-pub struct Comments {
+#[derive(Queryable, Identifiable)]
+pub struct Comment {
     pub id: i32,
     pub commenting_user: i32,
     pub commented_post: i32,
