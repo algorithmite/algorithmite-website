@@ -1,11 +1,11 @@
 CREATE TABLE routes (
-    route_key serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     parent integer REFERENCES routes,
     url_slug text
 );
 
 CREATE TABLE roles (
-    role_key serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     role_name varchar(255) NOT NULL,
     role_level integer NOT NULL DEFAULT 0,
     can_edit_pages boolean NOT NULL DEFAULT false,
@@ -24,7 +24,7 @@ SELECT
     diesel_manage_updated_at('roles');
 
 CREATE TABLE users (
-    user_key serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     user_role integer REFERENCES roles NOT NULL,
     username varchar(255) UNIQUE NOT NULL,
     email text NOT NULL,
@@ -48,7 +48,7 @@ CREATE TYPE user_action_types AS ENUM (
 );
 
 CREATE TABLE user_actions (
-    user_action_key serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     actor integer REFERENCES users NOT NULL,
     ip inet,
     user_action user_action_types NOT NULL,
@@ -62,7 +62,7 @@ CREATE TYPE moderation_action_types AS ENUM (
 );
 
 CREATE TABLE moderation_actions (
-    moderation_action_key serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     moderator integer REFERENCES users NOT NULL,
     actor integer REFERENCES users NOT NULL,
     pre_action_role integer REFERENCES roles NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE moderation_actions (
 );
 
 CREATE TABLE posts (
-    post_key serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     url_route integer REFERENCES routes NOT NULL,
     author integer REFERENCES users NOT NULL,
     title text,
@@ -86,7 +86,7 @@ SELECT
     diesel_manage_updated_at('posts');
 
 CREATE TABLE pages (
-    page_key serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     url_route integer REFERENCES routes NOT NULL,
     template_location text,
     created_at timestamp NOT NULL DEFAULT NOW(),
@@ -98,7 +98,7 @@ SELECT
     diesel_manage_updated_at('pages');
 
 CREATE TABLE comments (
-    comment_key serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     commenting_user integer REFERENCES users NOT NULL,
     commented_post integer REFERENCES posts NOT NULL,
     commented_comment integer REFERENCES comments,

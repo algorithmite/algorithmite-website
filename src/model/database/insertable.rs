@@ -52,7 +52,6 @@ pub struct NewUser<'a> {
 #[derive(Insertable)]
 #[table_name = "posts"]
 pub struct NewPost<'a> {
-    pub post_key: i32,
     pub url_route: i32,
     pub author: i32,
     pub title: &'a str,
@@ -63,7 +62,6 @@ pub struct NewPost<'a> {
 #[derive(Insertable)]
 #[table_name = "pages"]
 pub struct NewPage<'a> {
-    pub page_key: i32,
     pub url_route: i32,
     pub template_location: &'a str,
 }
@@ -71,7 +69,6 @@ pub struct NewPage<'a> {
 #[derive(Insertable)]
 #[table_name = "comments"]
 pub struct NewComment<'a> {
-    pub comment_key: i32,
     pub commenting_user: i32,
     pub commented_post: i32,
     pub commented_comment: i32,

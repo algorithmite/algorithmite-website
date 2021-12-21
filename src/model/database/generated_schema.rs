@@ -1,6 +1,6 @@
 table! {
-    comments (comment_key) {
-        comment_key -> Int4,
+    comments (id) {
+        id -> Int4,
         commenting_user -> Int4,
         commented_post -> Int4,
         commented_comment -> Nullable<Int4>,
@@ -12,8 +12,8 @@ table! {
 }
 
 table! {
-    moderation_actions (moderation_action_key) {
-        moderation_action_key -> Int4,
+    moderation_actions (id) {
+        id -> Int4,
         moderator -> Int4,
         actor -> Int4,
         pre_action_role -> Int4,
@@ -23,8 +23,8 @@ table! {
 }
 
 table! {
-    pages (page_key) {
-        page_key -> Int4,
+    pages (id) {
+        id -> Int4,
         url_route -> Int4,
         template_location -> Nullable<Text>,
         created_at -> Timestamp,
@@ -34,8 +34,8 @@ table! {
 }
 
 table! {
-    posts (post_key) {
-        post_key -> Int4,
+    posts (id) {
+        id -> Int4,
         url_route -> Int4,
         author -> Int4,
         title -> Nullable<Text>,
@@ -48,8 +48,8 @@ table! {
 }
 
 table! {
-    roles (role_key) {
-        role_key -> Int4,
+    roles (id) {
+        id -> Int4,
         role_name -> Varchar,
         role_level -> Int4,
         can_edit_pages -> Bool,
@@ -66,16 +66,16 @@ table! {
 }
 
 table! {
-    routes (route_key) {
-        route_key -> Int4,
+    routes (id) {
+        id -> Int4,
         parent -> Nullable<Int4>,
         url_slug -> Nullable<Text>,
     }
 }
 
 table! {
-    user_actions (user_action_key) {
-        user_action_key -> Int4,
+    user_actions (id) {
+        id -> Int4,
         actor -> Int4,
         ip -> Nullable<Inet>,
         user_action -> User_action_types,
@@ -84,8 +84,8 @@ table! {
 }
 
 table! {
-    users (user_key) {
-        user_key -> Int4,
+    users (id) {
+        id -> Int4,
         user_role -> Int4,
         username -> Varchar,
         email -> Text,

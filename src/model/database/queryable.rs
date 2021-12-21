@@ -3,7 +3,7 @@ use super::model_enums::{UserActionTypes,ModerationActionTypes};
 
 #[derive(Queryable)]
 pub struct UserActions {
-    pub user_action_key: i32,
+    pub id: i32,
     pub actor: i32,
     pub ip: String,
     pub user_action: UserActionTypes,
@@ -12,7 +12,7 @@ pub struct UserActions {
 
 #[derive(Queryable)]
 pub struct ModerationActions {
-    pub moderation_action_key: i32,
+    pub id: i32,
     pub moderator: i32,
     pub actor: i32,
     pub pre_action_role: i32,
@@ -22,14 +22,14 @@ pub struct ModerationActions {
 
 #[derive(Queryable)]
 pub struct Routes {
-    pub route_key: i32,
+    pub id: i32,
     pub parent: i32,
     pub url_slug: String
 }
 
 #[derive(Queryable)]
 pub struct Roles {
-    pub role_key: i32,
+    pub id: i32,
     pub role_name: String,
     pub role_level: i32,
     pub can_edit_pages: bool,
@@ -46,7 +46,7 @@ pub struct Roles {
 
 #[derive(Queryable)]
 pub struct Users {
-    pub user_key: i32,
+    pub id: i32,
     pub user_role: i32,
     pub username: String,
     pub email: String,
@@ -58,7 +58,7 @@ pub struct Users {
 
 #[derive(Queryable)]
 pub struct Posts {
-    pub post_key: i32,
+    pub id: i32,
     pub url_route: i32,
     pub author: i32,
     pub title: String,
@@ -71,7 +71,7 @@ pub struct Posts {
 
 #[derive(Queryable)]
 pub struct Pages {
-    pub page_key: i32,
+    pub id: i32,
     pub url_route: i32,
     pub template_location: String,
     pub created_at: NaiveDateTime,
@@ -81,7 +81,7 @@ pub struct Pages {
 
 #[derive(Queryable)]
 pub struct Comments {
-    pub comment_key: i32,
+    pub id: i32,
     pub commenting_user: i32,
     pub commented_post: i32,
     pub commented_comment: i32,
