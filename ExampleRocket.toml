@@ -2,7 +2,7 @@
 algorithmite = { url = "postgres://testuser:password@localhost/algorithmite" }
 
 [development]
-address = "127.0. 0.1"
+address = "127.0.0.1"
 port = 8000
 # workers = [number of cpus * 2]
 # keep_alive = 5
@@ -15,7 +15,7 @@ secret_key = "D0S1MOYOqz3YBUe/kUY+nodIc0etqY/n+169P3Rt2Zh8"
 limits = { forms = 32768 }
 
 [staging]
-address = "127.0. 0.1"
+address = "127.0.0.1"
 port = 8000
 # workers = [number of cpus * 2]
 # keep_alive = 5
@@ -26,7 +26,7 @@ secret_key = "SYUoqwrcsSJHUXj2n1VpByyPrO5dqDVinWdMEcIGXxb4"
 limits = { forms = 32768 }
 
 [production]
-address = "127.0. 0.1"
+address = "127.0.0.1"
 port = 8000
 # workers = [number of cpus * 2]
 # keep_alive = 5
