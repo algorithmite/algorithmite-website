@@ -1,5 +1,10 @@
+use crate::model::database::{
+    finalized_schema::{
+        comments, moderation_actions, pages, posts, roles, routes, user_actions, users,
+    },
+    model_enums::{ModerationActionTypes, UserActionTypes},
+};
 use chrono::NaiveDateTime;
-use crate::model::database::{model_enums::{UserActionTypes,ModerationActionTypes}, finalized_schema::{comments, moderation_actions, pages, posts, roles, routes, user_actions, users}};
 
 #[derive(Queryable, Identifiable)]
 pub struct UserAction {
@@ -7,7 +12,7 @@ pub struct UserAction {
     pub actor: i32,
     pub ip: String,
     pub user_action: UserActionTypes,
-    pub created_at: NaiveDateTime
+    pub created_at: NaiveDateTime,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -17,14 +22,14 @@ pub struct ModerationAction {
     pub actor: i32,
     pub pre_action_role: i32,
     pub moderation_action: ModerationActionTypes,
-    pub created_at: NaiveDateTime
+    pub created_at: NaiveDateTime,
 }
 
 #[derive(Queryable, Identifiable)]
 pub struct Route {
     pub id: i32,
     pub parent: i32,
-    pub url_slug: String
+    pub url_slug: String,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -41,7 +46,7 @@ pub struct Role {
     pub can_comment: bool,
     pub comments_visible: bool,
     pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime
+    pub updated_at: NaiveDateTime,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -53,7 +58,7 @@ pub struct User {
     pub password_hash: String,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: NaiveDateTime
+    pub deleted_at: NaiveDateTime,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -66,7 +71,7 @@ pub struct Post {
     pub tab_text: String,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: NaiveDateTime
+    pub deleted_at: NaiveDateTime,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -76,7 +81,7 @@ pub struct Page {
     pub template_location: String,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: NaiveDateTime
+    pub deleted_at: NaiveDateTime,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -88,5 +93,5 @@ pub struct Comment {
     pub content: String,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: NaiveDateTime
+    pub deleted_at: NaiveDateTime,
 }

@@ -6,12 +6,12 @@ pub enum UserActionTypes {
     Delete,
     ResetPasswordLoggedIn,
     ResetPasswordEmailSent,
-    ResetPasswordEmail
+    ResetPasswordEmail,
 }
 
 #[derive(DbEnum, Debug)]
 pub enum ModerationActionTypes {
     ChangeRole,
     DeleteComment,
-    UndoDeleteComment
+    UndoDeleteComment,
 }

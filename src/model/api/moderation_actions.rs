@@ -1,6 +1,9 @@
-use crate::model::database::{model_enums::ModerationActionTypes, insertable::NewModerationAction, queryable::ModerationAction};
+use crate::model::database::{
+    insertable::NewModerationAction, model_enums::ModerationActionTypes,
+    queryable::ModerationAction,
+};
 
-/* 
+/*
 #[derive(Queryable, Identifiable)]
 pub struct ModerationAction {
     pub id: i32,
@@ -10,7 +13,7 @@ pub struct ModerationAction {
     pub moderation_action: ModerationActionTypes,
     pub created_at: NaiveDateTime
 }
- * 
+ *
 #[derive(Insertable)]
 #[table_name = "moderation_actions"]
 pub struct NewModerationAction {
@@ -23,4 +26,4 @@ pub struct NewModerationAction {
 
 //pub fn queryAll(conn: &mut PgConnection){}
 
-//pub fn 
+//pub fn

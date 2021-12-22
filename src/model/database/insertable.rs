@@ -1,5 +1,10 @@
+use crate::model::database::{
+    finalized_schema::{
+        comments, moderation_actions, pages, posts, roles, routes, user_actions, users,
+    },
+    model_enums::{ModerationActionTypes, UserActionTypes},
+};
 use ipnetwork::IpNetwork;
-use crate::model::database::{model_enums::{UserActionTypes,ModerationActionTypes}, finalized_schema::{comments, moderation_actions, pages, posts, roles, routes, user_actions, users}};
 
 #[derive(Insertable)]
 #[table_name = "user_actions"]
@@ -22,7 +27,7 @@ pub struct NewModerationAction {
 #[table_name = "routes"]
 pub struct NewRoute<'a> {
     pub parent: i32,
-    pub url_slug: &'a str
+    pub url_slug: &'a str,
 }
 
 #[derive(Insertable)]
