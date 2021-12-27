@@ -10,7 +10,7 @@ use chrono::NaiveDateTime;
 pub struct UserAction {
     pub id: i32,
     pub actor: i32,
-    pub ip: String,
+    pub ip: Option<String>,
     pub user_action: UserActionTypes,
     pub created_at: NaiveDateTime,
 }
@@ -28,8 +28,8 @@ pub struct ModerationAction {
 #[derive(Queryable, Identifiable)]
 pub struct Route {
     pub id: i32,
-    pub parent: i32,
-    pub url_slug: String,
+    pub parent: Option<i32>,
+    pub url_slug: Option<String>,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -58,7 +58,7 @@ pub struct User {
     pub password_hash: String,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: NaiveDateTime,
+    pub deleted_at: Option<NaiveDateTime>,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -66,22 +66,22 @@ pub struct Post {
     pub id: i32,
     pub url_route: i32,
     pub author: i32,
-    pub title: String,
-    pub content: String,
-    pub tab_text: String,
+    pub title: Option<String>,
+    pub content: Option<String>,
+    pub tab_text: Option<String>,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: NaiveDateTime,
+    pub deleted_at: Option<NaiveDateTime>,
 }
 
 #[derive(Queryable, Identifiable)]
 pub struct Page {
     pub id: i32,
     pub url_route: i32,
-    pub template_location: String,
+    pub template_location: Option<String>,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: NaiveDateTime,
+    pub deleted_at: Option<NaiveDateTime>,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -89,9 +89,9 @@ pub struct Comment {
     pub id: i32,
     pub commenting_user: i32,
     pub commented_post: i32,
-    pub commented_comment: i32,
+    pub commented_comment: Option<i32>,
     pub content: String,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: NaiveDateTime,
+    pub deleted_at: Option<NaiveDateTime>,
 }

@@ -1,14 +1,7 @@
 use crate::model::database::{
     finalized_schema::users::dsl::*, insertable::NewUser, queryable::User,
 };
-use rocket_sync_db_pools::{
-    database,
-    diesel::{
-        prelude::*,
-        result::{Error, QueryResult},
-        PgConnection,
-    },
-};
+use rocket_sync_db_pools::diesel::{prelude::*, result::QueryResult, PgConnection};
 
 /*
 #[derive(Insertable)]
@@ -34,9 +27,9 @@ pub struct User {
  */
 
 pub fn queryUserByID(conn: &mut PgConnection, query_id: i32) -> QueryResult<User> {
-    diesel::update(users.filter(id.eq(query_id))).get_result::<User>(&conn)
+    users.filter(id.eq(query_id)).first(conn)
 }
 
 pub fn queryUserByUsername(conn: &mut PgConnection, query_username: String) -> QueryResult<User> {
-    diesel::update(users.filter(username.eq(query_username))).get_result::<User>(&conn)
+    users.filter(username.eq(query_username)).first(conn)
 }
