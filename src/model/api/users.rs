@@ -37,7 +37,7 @@ pub enum PasswordStatus {
 }
 
 pub enum UserCreationStatus {
-    Success(QueryResult<User>),
+    Success(UserExistsStatus),
     UsernameExists,
     EmailExists,
 }
@@ -107,5 +107,5 @@ pub fn createUser(conn: &PgConnection, input_username: String, input_email: Stri
         email: &input_email,
         password_hash: &encodePassword(input_password),
     };
-    UserCreationStatus::Success(insert_into(users).values(&new_user).get_result(conn))
+    UserCreationStatus::Success(userExists(insert_into(users).values(&new_user).get_result(conn)))
 }
