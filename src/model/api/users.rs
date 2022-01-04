@@ -1,7 +1,8 @@
 use crate::model::database::{
     finalized_schema::users::dsl::*, insertable::NewUser, queryable::User,
 };
-use rocket_sync_db_pools::diesel::{prelude::*, result::QueryResult, PgConnection};
+use rocket_sync_db_pools::diesel::{prelude::*, result::QueryResult, PgConnection, insert_into};
+use argon2::{self, Config, ThreadMode};
 
 /*
 #[derive(Insertable)]
@@ -26,10 +27,66 @@ pub struct User {
 }
  */
 
-pub fn queryUserByID(conn: &mut PgConnection, query_id: i32) -> QueryResult<User> {
+const DEFAULT_SALT: &[u8] = b"fDzMWxV9RYwZ60ZzG0b4AejOEho/mVeFmnzwswpmUnEw";
+
+pub enum PasswordStatus {
+    UserDoesNotExist,
+    NoMatch,
+    Match,
+}
+
+pub enum UserCreationStatus {
+    Success(QueryResult<User>),
+    UsernameExists,
+    EmailExists,
+}
+
+pub fn queryID(conn: &PgConnection, query_id: i32) -> QueryResult<User> {
     users.filter(id.eq(query_id)).first(conn)
 }
 
-pub fn queryUserByUsername(conn: &mut PgConnection, query_username: String) -> QueryResult<User> {
+pub fn queryUsername(conn: &PgConnection, query_username: String) -> QueryResult<User> {
     users.filter(username.eq(query_username)).first(conn)
+}
+
+pub fn queryEmail(conn: &PgConnection, query_email: String) -> QueryResult<User> {
+    users.filter(email.eq(query_email)).first(conn)
+}
+
+fn encodePassword(input_password: String) -> String {
+    let mut config = Config::default();
+    config.lanes = 4;
+    config.thread_mode = ThreadMode::Parallel;
+    argon2::hash_encoded(input_password.as_bytes(), DEFAULT_SALT, &config).unwrap()
+}
+
+pub fn testPassword(conn: &PgConnection, query_username: String, query_password: String) -> PasswordStatus {
+    let query_user = match queryUsername(conn, query_username) {
+        Ok(query_user) => query_user,
+        Err(e) => return PasswordStatus::UserDoesNotExist,
+    };
+    if argon2::verify_encoded(&query_user.password_hash, query_password.as_bytes()).unwrap() {
+        PasswordStatus::Match
+    } else {
+        PasswordStatus::NoMatch
+    }
+}
+
+pub fn createUser(conn: &PgConnection, input_username: String, input_email: String, input_password: String) -> UserCreationStatus {
+    match queryUsername(conn, input_username.to_owned()) {
+        Ok(_) => return UserCreationStatus::UsernameExists,
+        _ => "",
+    };
+    match queryEmail(conn, input_email.to_owned()) {
+        Ok(_) => return UserCreationStatus::EmailExists,
+        _ => "",
+    };
+    let new_user: NewUser = NewUser{
+        //TODO Get Default Role ID
+        user_role: 0,
+        username: &input_username,
+        email: &input_email,
+        password_hash: &encodePassword(input_password),
+    };
+    UserCreationStatus::Success(insert_into(users).values(&new_user).get_result(conn))
 }

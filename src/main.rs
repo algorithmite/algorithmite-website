@@ -5,6 +5,7 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_derive_enum;
 extern crate chrono;
+extern crate argon2;
 use rocket_sync_db_pools::database;
 pub mod model;
 
