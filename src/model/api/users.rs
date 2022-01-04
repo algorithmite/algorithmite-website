@@ -31,6 +31,7 @@ const DEFAULT_SALT: &[u8] = b"fDzMWxV9RYwZ60ZzG0b4AejOEho/mVeFmnzwswpmUnEw";
 
 pub enum PasswordStatus {
     UserDoesNotExist,
+    UserDeleted,
     NoMatch,
     Match,
 }
@@ -41,16 +42,32 @@ pub enum UserCreationStatus {
     EmailExists,
 }
 
-pub fn queryID(conn: &PgConnection, query_id: i32) -> QueryResult<User> {
-    users.filter(id.eq(query_id)).first(conn)
+pub enum UserExistsStatus {
+    Exists(User),
+    Deleted(User),
+    DoesNotExist,
 }
 
-pub fn queryUsername(conn: &PgConnection, query_username: String) -> QueryResult<User> {
-    users.filter(username.eq(query_username)).first(conn)
+fn userExists(test_user: QueryResult<User>) -> UserExistsStatus {
+    match test_user {
+        Ok(query_user) => match query_user.deleted_at {
+            Some(_) => return UserExistsStatus::Deleted(query_user),
+            None => return UserExistsStatus::Exists(query_user),
+        },
+        _ => return UserExistsStatus::DoesNotExist,
+    };
 }
 
-pub fn queryEmail(conn: &PgConnection, query_email: String) -> QueryResult<User> {
-    users.filter(email.eq(query_email)).first(conn)
+pub fn queryID(conn: &PgConnection, query_id: i32) -> UserExistsStatus {
+    userExists(users.filter(id.eq(query_id)).first(conn))
+}
+
+pub fn queryUsername(conn: &PgConnection, query_username: String) -> UserExistsStatus {
+    userExists(users.filter(username.eq(query_username)).first(conn))
+}
+
+pub fn queryEmail(conn: &PgConnection, query_email: String) -> UserExistsStatus {
+    userExists(users.filter(email.eq(query_email)).first(conn))
 }
 
 fn encodePassword(input_password: String) -> String {
@@ -61,9 +78,11 @@ fn encodePassword(input_password: String) -> String {
 }
 
 pub fn testPassword(conn: &PgConnection, query_username: String, query_password: String) -> PasswordStatus {
-    let query_user = match queryUsername(conn, query_username) {
-        Ok(query_user) => query_user,
-        Err(e) => return PasswordStatus::UserDoesNotExist,
+    let user_status = queryUsername(conn, query_username);
+    let query_user = match user_status {
+        UserExistsStatus::DoesNotExist => return PasswordStatus::UserDoesNotExist,
+        UserExistsStatus::Deleted(_) => return PasswordStatus::UserDeleted,
+        UserExistsStatus::Exists(query_user) => query_user,
     };
     if argon2::verify_encoded(&query_user.password_hash, query_password.as_bytes()).unwrap() {
         PasswordStatus::Match
@@ -74,11 +93,11 @@ pub fn testPassword(conn: &PgConnection, query_username: String, query_password:
 
 pub fn createUser(conn: &PgConnection, input_username: String, input_email: String, input_password: String) -> UserCreationStatus {
     match queryUsername(conn, input_username.to_owned()) {
-        Ok(_) => return UserCreationStatus::UsernameExists,
+        UserExistsStatus::Exists(_) => return UserCreationStatus::UsernameExists,
         _ => "",
     };
     match queryEmail(conn, input_email.to_owned()) {
-        Ok(_) => return UserCreationStatus::EmailExists,
+        UserExistsStatus::Exists(_) => return UserCreationStatus::EmailExists,
         _ => "",
     };
     let new_user: NewUser = NewUser{
