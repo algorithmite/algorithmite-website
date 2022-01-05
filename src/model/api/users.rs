@@ -2,6 +2,7 @@ use crate::model::database::{
     finalized_schema::users::dsl::*, insertable::NewUser, queryable::User,
 };
 use argon2::{self, Config, ThreadMode};
+use chrono::{DateTime, NaiveDateTime, Utc};
 use rocket_sync_db_pools::diesel::{insert_into, prelude::*, result::QueryResult, PgConnection};
 
 /*
@@ -13,8 +14,6 @@ pub struct NewUser<'a> {
     pub email: &'a str,
     pub password_hash: &'a str,
 }
- *
-#[derive(Queryable, Identifiable)]
 pub struct User {
     pub id: i32,
     pub user_role: i32,
@@ -23,7 +22,7 @@ pub struct User {
     pub password_hash: String,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: NaiveDateTime
+    pub deleted_at: Option<NaiveDateTime>
 }
  */
 
@@ -45,6 +44,13 @@ pub enum UserCreationStatus {
 pub enum UserExistsStatus {
     Exists(User),
     Deleted(User),
+    DoesNotExist,
+}
+
+pub enum UserUpdateStatus<T> {
+    Success(T),
+    Failure(T),
+    ValueOverlap,
     DoesNotExist,
 }
 
@@ -149,4 +155,109 @@ pub fn createUser(
     UserCreationStatus::Success(userExists(
         insert_into(users).values(&new_user).get_result(conn),
     ))
+}
+
+pub fn updateUserRole(
+    conn: &PgConnection,
+    user_id: i32,
+    new_user_role: i32,
+) -> UserUpdateStatus<i32> {
+    match queryAllID(conn, user_id) {
+        UserExistsStatus::Exists(query_user) | UserExistsStatus::Deleted(query_user) => {
+            let old_user_role = query_user.user_role;
+            match diesel::update(&query_user)
+                .set(user_role.eq(new_user_role))
+                .execute(conn)
+            {
+                Ok(_) => UserUpdateStatus::Success(old_user_role),
+                Err(_) => UserUpdateStatus::Failure(old_user_role),
+            }
+        }
+        UserExistsStatus::DoesNotExist => UserUpdateStatus::DoesNotExist,
+    }
+}
+
+pub fn updateUsername(
+    conn: &PgConnection,
+    user_id: i32,
+    new_username: String,
+) -> UserUpdateStatus<String> {
+    match queryActiveUsername(conn, new_username.clone()) {
+        UserExistsStatus::Exists(_) => UserUpdateStatus::ValueOverlap,
+        UserExistsStatus::Deleted(_) | UserExistsStatus::DoesNotExist => {
+            match queryAllID(conn, user_id) {
+                UserExistsStatus::Exists(query_user) | UserExistsStatus::Deleted(query_user) => {
+                    let old_username = query_user.username.clone();
+                    match diesel::update(&query_user)
+                        .set(username.eq(new_username))
+                        .execute(conn)
+                    {
+                        Ok(_) => UserUpdateStatus::Success(old_username),
+                        Err(_) => UserUpdateStatus::Failure(old_username),
+                    }
+                }
+                UserExistsStatus::DoesNotExist => UserUpdateStatus::DoesNotExist,
+            }
+        }
+    }
+}
+
+pub fn updateEmail(
+    conn: &PgConnection,
+    user_id: i32,
+    new_email: String,
+) -> UserUpdateStatus<String> {
+    match queryActiveEmail(conn, new_email.clone()) {
+        UserExistsStatus::Exists(_) => UserUpdateStatus::ValueOverlap,
+        UserExistsStatus::Deleted(_) | UserExistsStatus::DoesNotExist => {
+            match queryAllID(conn, user_id) {
+                UserExistsStatus::Exists(query_user) | UserExistsStatus::Deleted(query_user) => {
+                    let old_email = query_user.email.clone();
+                    match diesel::update(&query_user)
+                        .set(email.eq(new_email))
+                        .execute(conn)
+                    {
+                        Ok(_) => UserUpdateStatus::Success(old_email),
+                        Err(_) => UserUpdateStatus::Failure(old_email),
+                    }
+                }
+                UserExistsStatus::DoesNotExist => UserUpdateStatus::DoesNotExist,
+            }
+        }
+    }
+}
+
+pub fn updatePassword(
+    conn: &PgConnection,
+    user_id: i32,
+    old_password: String,
+    new_password: String,
+) -> UserUpdateStatus<String> {
+    match queryAllID(conn, user_id) {
+        UserExistsStatus::Exists(query_user) | UserExistsStatus::Deleted(query_user) => {
+            match argon2::verify_encoded(&query_user.password_hash, old_password.as_bytes()) {
+                Ok(_) => match diesel::update(&query_user)
+                    .set(password_hash.eq(encodePassword(new_password)))
+                    .execute(conn)
+                {
+                    Ok(_) => UserUpdateStatus::Success(old_password),
+                    Err(_) => UserUpdateStatus::Failure(old_password),
+                },
+                Err(_) => UserUpdateStatus::Failure(old_password),
+            }
+        }
+        UserExistsStatus::DoesNotExist => UserUpdateStatus::DoesNotExist,
+    }
+}
+
+pub fn deleteUser(conn: &PgConnection, user_id: i32) -> UserExistsStatus {
+    match queryAllID(conn, user_id) {
+        UserExistsStatus::Exists(query_user) => userExists(
+            diesel::update(&query_user)
+                .set(deleted_at.eq(Utc::now().naive_utc()))
+                .get_result(conn),
+        ),
+        UserExistsStatus::Deleted(query_user) => UserExistsStatus::Deleted(query_user),
+        UserExistsStatus::DoesNotExist => UserExistsStatus::DoesNotExist,
+    }
 }
