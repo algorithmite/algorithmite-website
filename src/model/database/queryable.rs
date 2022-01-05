@@ -49,7 +49,7 @@ pub struct Role {
     pub updated_at: NaiveDateTime,
 }
 
-#[derive(Queryable, Identifiable)]
+#[derive(Queryable, Identifiable, Clone)]
 pub struct User {
     pub id: i32,
     pub user_role: i32,

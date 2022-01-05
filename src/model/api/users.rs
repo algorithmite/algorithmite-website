@@ -58,16 +58,34 @@ fn userExists(test_user: QueryResult<User>) -> UserExistsStatus {
     };
 }
 
-pub fn queryID(conn: &PgConnection, query_id: i32) -> UserExistsStatus {
+fn usersExist(test_users: QueryResult<Vec<User>>) -> Vec<UserExistsStatus> {
+    let mut output = Vec::new();
+    match test_users {
+        Ok(test_users) => for query_user in test_users.iter() {
+            output.push(match query_user.deleted_at {
+                Some(_) => UserExistsStatus::Deleted(query_user.clone()),
+                None => UserExistsStatus::Exists(query_user.clone()),
+            })
+        },
+        _ => (),
+    }
+    output
+}
+
+pub fn queryAllID(conn: &PgConnection, query_id: i32) -> UserExistsStatus {
     userExists(users.filter(id.eq(query_id)).first(conn))
 }
 
-pub fn queryUsername(conn: &PgConnection, query_username: String) -> UserExistsStatus {
-    userExists(users.filter(username.eq(query_username)).first(conn))
+pub fn queryActiveUsername(conn: &PgConnection, query_username: String) -> UserExistsStatus {
+    userExists(users.filter(deleted_at.is_null()).filter(username.eq(query_username)).first(conn))
 }
 
-pub fn queryEmail(conn: &PgConnection, query_email: String) -> UserExistsStatus {
-    userExists(users.filter(email.eq(query_email)).first(conn))
+pub fn queryActiveEmail(conn: &PgConnection, query_email: String) -> UserExistsStatus {
+    userExists(users.filter(deleted_at.is_null()).filter(email.eq(query_email)).first(conn))
+}
+
+pub fn queryAllEmail(conn: &PgConnection, query_email: String) -> Vec<UserExistsStatus> {
+    usersExist(users.filter(email.eq(query_email)).get_results(conn))
 }
 
 fn encodePassword(input_password: String) -> String {
@@ -78,7 +96,7 @@ fn encodePassword(input_password: String) -> String {
 }
 
 pub fn testPassword(conn: &PgConnection, query_username: String, query_password: String) -> PasswordStatus {
-    let user_status = queryUsername(conn, query_username);
+    let user_status = queryActiveUsername(conn, query_username);
     let query_user = match user_status {
         UserExistsStatus::DoesNotExist => return PasswordStatus::UserDoesNotExist,
         UserExistsStatus::Deleted(_) => return PasswordStatus::UserDeleted,
@@ -92,13 +110,13 @@ pub fn testPassword(conn: &PgConnection, query_username: String, query_password:
 }
 
 pub fn createUser(conn: &PgConnection, input_username: String, input_email: String, input_password: String) -> UserCreationStatus {
-    match queryUsername(conn, input_username.to_owned()) {
+    match queryActiveUsername(conn, input_username.to_owned()) {
         UserExistsStatus::Exists(_) => return UserCreationStatus::UsernameExists,
-        _ => "",
+        _ => (),
     };
-    match queryEmail(conn, input_email.to_owned()) {
+    match queryActiveEmail(conn, input_email.to_owned()) {
         UserExistsStatus::Exists(_) => return UserCreationStatus::EmailExists,
-        _ => "",
+        _ => (),
     };
     let new_user: NewUser = NewUser{
         //TODO Get Default Role ID
