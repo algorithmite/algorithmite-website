@@ -1,8 +1,8 @@
 use crate::model::database::{
     finalized_schema::users::dsl::*, insertable::NewUser, queryable::User,
 };
-use rocket_sync_db_pools::diesel::{prelude::*, result::QueryResult, PgConnection, insert_into};
 use argon2::{self, Config, ThreadMode};
+use rocket_sync_db_pools::diesel::{insert_into, prelude::*, result::QueryResult, PgConnection};
 
 /*
 #[derive(Insertable)]
@@ -61,12 +61,14 @@ fn userExists(test_user: QueryResult<User>) -> UserExistsStatus {
 fn usersExist(test_users: QueryResult<Vec<User>>) -> Vec<UserExistsStatus> {
     let mut output = Vec::new();
     match test_users {
-        Ok(test_users) => for query_user in test_users.iter() {
-            output.push(match query_user.deleted_at {
-                Some(_) => UserExistsStatus::Deleted(query_user.clone()),
-                None => UserExistsStatus::Exists(query_user.clone()),
-            })
-        },
+        Ok(test_users) => {
+            for query_user in test_users.iter() {
+                output.push(match query_user.deleted_at {
+                    Some(_) => UserExistsStatus::Deleted(query_user.clone()),
+                    None => UserExistsStatus::Exists(query_user.clone()),
+                })
+            }
+        }
         _ => (),
     }
     output
@@ -77,11 +79,21 @@ pub fn queryAllID(conn: &PgConnection, query_id: i32) -> UserExistsStatus {
 }
 
 pub fn queryActiveUsername(conn: &PgConnection, query_username: String) -> UserExistsStatus {
-    userExists(users.filter(deleted_at.is_null()).filter(username.eq(query_username)).first(conn))
+    userExists(
+        users
+            .filter(deleted_at.is_null())
+            .filter(username.eq(query_username))
+            .first(conn),
+    )
 }
 
 pub fn queryActiveEmail(conn: &PgConnection, query_email: String) -> UserExistsStatus {
-    userExists(users.filter(deleted_at.is_null()).filter(email.eq(query_email)).first(conn))
+    userExists(
+        users
+            .filter(deleted_at.is_null())
+            .filter(email.eq(query_email))
+            .first(conn),
+    )
 }
 
 pub fn queryAllEmail(conn: &PgConnection, query_email: String) -> Vec<UserExistsStatus> {
@@ -95,7 +107,11 @@ fn encodePassword(input_password: String) -> String {
     argon2::hash_encoded(input_password.as_bytes(), DEFAULT_SALT, &config).unwrap()
 }
 
-pub fn testPassword(conn: &PgConnection, query_username: String, query_password: String) -> PasswordStatus {
+pub fn testPassword(
+    conn: &PgConnection,
+    query_username: String,
+    query_password: String,
+) -> PasswordStatus {
     let user_status = queryActiveUsername(conn, query_username);
     let query_user = match user_status {
         UserExistsStatus::DoesNotExist => return PasswordStatus::UserDoesNotExist,
@@ -109,7 +125,12 @@ pub fn testPassword(conn: &PgConnection, query_username: String, query_password:
     }
 }
 
-pub fn createUser(conn: &PgConnection, input_username: String, input_email: String, input_password: String) -> UserCreationStatus {
+pub fn createUser(
+    conn: &PgConnection,
+    input_username: String,
+    input_email: String,
+    input_password: String,
+) -> UserCreationStatus {
     match queryActiveUsername(conn, input_username.to_owned()) {
         UserExistsStatus::Exists(_) => return UserCreationStatus::UsernameExists,
         _ => (),
@@ -118,12 +139,14 @@ pub fn createUser(conn: &PgConnection, input_username: String, input_email: Stri
         UserExistsStatus::Exists(_) => return UserCreationStatus::EmailExists,
         _ => (),
     };
-    let new_user: NewUser = NewUser{
+    let new_user: NewUser = NewUser {
         //TODO Get Default Role ID
         user_role: 0,
         username: &input_username,
         email: &input_email,
         password_hash: &encodePassword(input_password),
     };
-    UserCreationStatus::Success(userExists(insert_into(users).values(&new_user).get_result(conn)))
+    UserCreationStatus::Success(userExists(
+        insert_into(users).values(&new_user).get_result(conn),
+    ))
 }

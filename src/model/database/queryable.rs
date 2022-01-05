@@ -5,8 +5,9 @@ use crate::model::database::{
     model_enums::{ModerationActionTypes, UserActionTypes},
 };
 use chrono::NaiveDateTime;
+use std::cmp::Ordering;
 
-#[derive(Queryable, Identifiable)]
+#[derive(Clone, Debug, Eq, Identifiable, PartialOrd, Queryable)]
 pub struct UserAction {
     pub id: i32,
     pub actor: i32,
@@ -14,8 +15,18 @@ pub struct UserAction {
     pub user_action: UserActionTypes,
     pub created_at: NaiveDateTime,
 }
+impl Ord for UserAction {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.id.cmp(&other.id)
+    }
+}
+impl PartialEq for UserAction {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
 
-#[derive(Queryable, Identifiable)]
+#[derive(Clone, Debug, Eq, Identifiable, PartialOrd, Queryable)]
 pub struct ModerationAction {
     pub id: i32,
     pub moderator: i32,
@@ -24,15 +35,35 @@ pub struct ModerationAction {
     pub moderation_action: ModerationActionTypes,
     pub created_at: NaiveDateTime,
 }
+impl Ord for ModerationAction {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.id.cmp(&other.id)
+    }
+}
+impl PartialEq for ModerationAction {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
 
-#[derive(Queryable, Identifiable)]
+#[derive(Clone, Debug, Eq, Identifiable, PartialOrd, Queryable)]
 pub struct Route {
     pub id: i32,
     pub parent: Option<i32>,
     pub url_slug: Option<String>,
 }
+impl Ord for Route {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.id.cmp(&other.id)
+    }
+}
+impl PartialEq for Route {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
 
-#[derive(Queryable, Identifiable)]
+#[derive(Clone, Debug, Eq, Identifiable, PartialOrd, Queryable)]
 pub struct Role {
     pub id: i32,
     pub role_name: String,
@@ -48,8 +79,18 @@ pub struct Role {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
+impl Ord for Role {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.id.cmp(&other.id)
+    }
+}
+impl PartialEq for Role {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
 
-#[derive(Queryable, Identifiable, Clone)]
+#[derive(Clone, Debug, Eq, Identifiable, PartialOrd, Queryable)]
 pub struct User {
     pub id: i32,
     pub user_role: i32,
@@ -60,8 +101,18 @@ pub struct User {
     pub updated_at: NaiveDateTime,
     pub deleted_at: Option<NaiveDateTime>,
 }
+impl Ord for User {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.id.cmp(&other.id)
+    }
+}
+impl PartialEq for User {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
 
-#[derive(Queryable, Identifiable)]
+#[derive(Clone, Debug, Eq, Identifiable, PartialOrd, Queryable)]
 pub struct Post {
     pub id: i32,
     pub url_route: i32,
@@ -73,8 +124,18 @@ pub struct Post {
     pub updated_at: NaiveDateTime,
     pub deleted_at: Option<NaiveDateTime>,
 }
+impl Ord for Post {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.id.cmp(&other.id)
+    }
+}
+impl PartialEq for Post {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
 
-#[derive(Queryable, Identifiable)]
+#[derive(Clone, Debug, Eq, Identifiable, PartialOrd, Queryable)]
 pub struct Page {
     pub id: i32,
     pub url_route: i32,
@@ -83,8 +144,18 @@ pub struct Page {
     pub updated_at: NaiveDateTime,
     pub deleted_at: Option<NaiveDateTime>,
 }
+impl Ord for Page {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.id.cmp(&other.id)
+    }
+}
+impl PartialEq for Page {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
 
-#[derive(Queryable, Identifiable)]
+#[derive(Clone, Debug, Eq, Identifiable, PartialOrd, Queryable)]
 pub struct Comment {
     pub id: i32,
     pub commenting_user: i32,
@@ -94,4 +165,14 @@ pub struct Comment {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
     pub deleted_at: Option<NaiveDateTime>,
+}
+impl Ord for Comment {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.id.cmp(&other.id)
+    }
+}
+impl PartialEq for Comment {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
 }

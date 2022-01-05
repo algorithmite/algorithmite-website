@@ -1,15 +1,15 @@
-#[derive(DbEnum, Debug)]
+#[derive(Clone, DbEnum, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum UserActionTypes {
+    Create,
     Login,
     Logout,
-    Create,
-    Delete,
-    ResetPasswordLoggedIn,
     ResetPasswordEmailSent,
-    ResetPasswordEmail,
+    ResetPasswordFromEmail,
+    ResetPasswordLoggedIn,
+    Delete,
 }
 
-#[derive(DbEnum, Debug)]
+#[derive(Clone, DbEnum, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum ModerationActionTypes {
     ChangeRole,
     DeleteComment,

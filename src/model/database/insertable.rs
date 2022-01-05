@@ -6,7 +6,7 @@ use crate::model::database::{
 };
 use ipnetwork::IpNetwork;
 
-#[derive(Insertable)]
+#[derive(Clone, Debug, Insertable)]
 #[table_name = "user_actions"]
 pub struct NewUserAction {
     pub actor: i32,
@@ -14,7 +14,7 @@ pub struct NewUserAction {
     pub user_action: UserActionTypes,
 }
 
-#[derive(Insertable)]
+#[derive(Clone, Debug, Insertable)]
 #[table_name = "moderation_actions"]
 pub struct NewModerationAction {
     pub moderator: i32,
@@ -23,14 +23,14 @@ pub struct NewModerationAction {
     pub moderation_action: ModerationActionTypes,
 }
 
-#[derive(Insertable)]
+#[derive(Clone, Debug, Insertable)]
 #[table_name = "routes"]
 pub struct NewRoute<'a> {
     pub parent: i32,
     pub url_slug: &'a str,
 }
 
-#[derive(Insertable)]
+#[derive(Clone, Debug, Insertable)]
 #[table_name = "roles"]
 pub struct NewRole<'a> {
     pub role_name: &'a str,
@@ -45,7 +45,7 @@ pub struct NewRole<'a> {
     pub comments_visible: bool,
 }
 
-#[derive(Insertable)]
+#[derive(Clone, Debug, Insertable)]
 #[table_name = "users"]
 pub struct NewUser<'a> {
     pub user_role: i32,
@@ -54,7 +54,7 @@ pub struct NewUser<'a> {
     pub password_hash: &'a str,
 }
 
-#[derive(Insertable)]
+#[derive(Clone, Debug, Insertable)]
 #[table_name = "posts"]
 pub struct NewPost<'a> {
     pub url_route: i32,
@@ -64,14 +64,14 @@ pub struct NewPost<'a> {
     pub tab_text: &'a str,
 }
 
-#[derive(Insertable)]
+#[derive(Clone, Debug, Insertable)]
 #[table_name = "pages"]
 pub struct NewPage<'a> {
     pub url_route: i32,
     pub template_location: &'a str,
 }
 
-#[derive(Insertable)]
+#[derive(Clone, Debug, Insertable)]
 #[table_name = "comments"]
 pub struct NewComment<'a> {
     pub commenting_user: i32,
