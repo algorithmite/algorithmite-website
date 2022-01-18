@@ -1,7 +1,7 @@
 use crate::model::database::{
     finalized_schema::users::dsl::*, insertable::NewUser, queryable::User,
 };
-use argon2::{self, Config, ThreadMode};
+use argon2::{Config, ThreadMode};
 use chrono::Utc;
 use rocket_sync_db_pools::diesel::{insert_into, prelude::*, result::QueryResult, PgConnection};
 
