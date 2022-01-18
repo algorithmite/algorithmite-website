@@ -114,6 +114,7 @@ pub fn create_user(
     conn: &PgConnection,
     input_username: String,
     input_email: String,
+    input_user_role: i32,
     input_password: String,
 ) -> UserCreationStatus {
     match query_active_username(conn, input_username.to_owned()) {
@@ -125,8 +126,7 @@ pub fn create_user(
         _ => (),
     };
     let new_user: NewUser = NewUser {
-        //TODO Get Default Role ID
-        user_role: 0,
+        user_role: input_user_role,
         username: &input_username,
         email: &input_email,
         password_hash: &encode_password(input_password),
