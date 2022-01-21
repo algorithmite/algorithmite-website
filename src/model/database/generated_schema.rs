@@ -29,7 +29,6 @@ table! {
         template_location -> Nullable<Text>,
         created_at -> Timestamp,
         updated_at -> Timestamp,
-        deleted_at -> Nullable<Timestamp>,
     }
 }
 
@@ -69,7 +68,9 @@ table! {
     routes (id) {
         id -> Int4,
         parent -> Nullable<Int4>,
-        url_slug -> Nullable<Text>,
+        url_slug -> Text,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 

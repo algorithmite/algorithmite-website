@@ -26,7 +26,7 @@ pub struct NewModerationAction {
 #[derive(Clone, Debug, Insertable)]
 #[table_name = "routes"]
 pub struct NewRoute<'a> {
-    pub parent: i32,
+    pub parent: Option<i32>,
     pub url_slug: &'a str,
 }
 

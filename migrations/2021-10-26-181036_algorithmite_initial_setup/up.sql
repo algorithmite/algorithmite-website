@@ -1,8 +1,13 @@
 CREATE TABLE routes (
     id serial PRIMARY KEY,
     parent integer REFERENCES routes,
-    url_slug text
+    url_slug text NOT NULL,
+    created_at timestamp NOT NULL DEFAULT NOW(),
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
+
+SELECT
+    diesel_manage_updated_at('routes');
 
 CREATE TABLE roles (
     id serial PRIMARY KEY,
@@ -26,7 +31,7 @@ SELECT
 CREATE TABLE users (
     id serial PRIMARY KEY,
     user_role integer REFERENCES roles NOT NULL,
-    username varchar(255) UNIQUE NOT NULL,
+    username varchar(255) NOT NULL,
     email text NOT NULL,
     password_hash text NOT NULL,
     created_at timestamp NOT NULL DEFAULT NOW(),
@@ -90,8 +95,7 @@ CREATE TABLE pages (
     url_route integer REFERENCES routes NOT NULL,
     template_location text,
     created_at timestamp NOT NULL DEFAULT NOW(),
-    updated_at timestamp NOT NULL DEFAULT NOW(),
-    deleted_at timestamp
+    updated_at timestamp NOT NULL DEFAULT NOW()
 );
 
 SELECT

@@ -51,7 +51,9 @@ impl PartialEq for ModerationAction {
 pub struct Route {
     pub id: i32,
     pub parent: Option<i32>,
-    pub url_slug: Option<String>,
+    pub url_slug: String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
 }
 impl Ord for Route {
     fn cmp(&self, other: &Self) -> Ordering {
@@ -143,7 +145,6 @@ pub struct Page {
     pub template_location: Option<String>,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub deleted_at: Option<NaiveDateTime>,
 }
 impl Ord for Page {
     fn cmp(&self, other: &Self) -> Ordering {
