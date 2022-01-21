@@ -21,10 +21,12 @@ pub fn create_user_action(
     input_ip: Option<IpNetwork>,
     input_user_action: UserActionTypes,
 ) -> QueryResult<UserAction> {
-    let new_role: NewUserAction = NewUserAction {
+    let new_user_action: NewUserAction = NewUserAction {
         actor: input_actor,
         ip: input_ip,
         user_action: input_user_action,
     };
-    insert_into(user_actions).values(&new_role).get_result(conn)
+    insert_into(user_actions)
+        .values(&new_user_action)
+        .get_result(conn)
 }
