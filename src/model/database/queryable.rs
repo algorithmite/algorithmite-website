@@ -5,13 +5,14 @@ use crate::model::database::{
     model_enums::{ModerationActionTypes, UserActionTypes},
 };
 use chrono::NaiveDateTime;
+use ipnetwork::IpNetwork;
 use std::cmp::Ordering;
 
 #[derive(Clone, Debug, Eq, Identifiable, PartialOrd, Queryable)]
 pub struct UserAction {
     pub id: i32,
     pub actor: i32,
-    pub ip: Option<String>,
+    pub ip: Option<IpNetwork>,
     pub user_action: UserActionTypes,
     pub created_at: NaiveDateTime,
 }

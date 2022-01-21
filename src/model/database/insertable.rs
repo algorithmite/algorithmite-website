@@ -10,7 +10,7 @@ use ipnetwork::IpNetwork;
 #[table_name = "user_actions"]
 pub struct NewUserAction {
     pub actor: i32,
-    pub ip: IpNetwork,
+    pub ip: Option<IpNetwork>,
     pub user_action: UserActionTypes,
 }
 
