@@ -34,6 +34,7 @@ CREATE TABLE users (
     username varchar(255) NOT NULL,
     email text NOT NULL,
     password_hash text NOT NULL,
+    bio text NOT NULL,
     created_at timestamp NOT NULL DEFAULT NOW(),
     updated_at timestamp NOT NULL DEFAULT NOW(),
     deleted_at timestamp

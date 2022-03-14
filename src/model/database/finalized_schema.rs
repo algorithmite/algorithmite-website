@@ -96,6 +96,7 @@ table! {
         user_role -> Int4,
         username -> Varchar,
         email -> Text,
+        bio -> Text,
         password_hash -> Text,
         created_at -> Timestamp,
         updated_at -> Timestamp,

@@ -51,6 +51,7 @@ pub struct NewUser<'a> {
     pub user_role: i32,
     pub username: &'a str,
     pub email: &'a str,
+    pub bio: &'a str,
     pub password_hash: &'a str,
 }
 

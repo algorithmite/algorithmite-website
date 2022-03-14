@@ -91,10 +91,7 @@ pub fn update_route(
 
             Some(
                 diesel::update(&query_role)
-                    .set((
-                        parent.eq(final_parent),
-                        url_slug.eq(final_url_slug),
-                    ))
+                    .set((parent.eq(final_parent), url_slug.eq(final_url_slug)))
                     .execute(conn),
             )
         }
