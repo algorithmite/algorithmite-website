@@ -29,7 +29,15 @@ pub fn create_user(
         Ok(_) => return None,
         _ => (),
     }
-    match read_user(conn, false, None, None, Some(input_email.to_owned()), None, None) {
+    match read_user(
+        conn,
+        false,
+        None,
+        None,
+        Some(input_email.to_owned()),
+        None,
+        None,
+    ) {
         Ok(_) => return None,
         _ => (),
     }
@@ -120,7 +128,15 @@ pub fn read_users(
 //Update
 
 pub fn update_username(conn: &PgConnection, user_id: i32, new_username: String) -> Option<String> {
-    match read_user(conn, false, None, Some(new_username.clone()), None, None, None) {
+    match read_user(
+        conn,
+        false,
+        None,
+        Some(new_username.clone()),
+        None,
+        None,
+        None,
+    ) {
         Ok(_) => None,
         _ => match read_user(conn, false, Some(user_id), None, None, None, None) {
             Ok(query_user) => {
