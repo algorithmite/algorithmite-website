@@ -5,7 +5,7 @@ use rocket_sync_db_pools::diesel::{insert_into, prelude::*, result::QueryResult,
 
 //Create
 
-pub fn create_user_action(
+pub fn create_route(
     conn: &PgConnection,
     input_parent: Option<i32>,
     input_url_slug: String,
