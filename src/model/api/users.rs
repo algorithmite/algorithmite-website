@@ -16,7 +16,14 @@ pub fn create_user(
     input_user_role: i32,
     input_password: String,
 ) -> Option<QueryResult<User>> {
-    match read_user(conn, false, None, Some(input_username.to_owned()), None, None) {
+    match read_user(
+        conn,
+        false,
+        None,
+        Some(input_username.to_owned()),
+        None,
+        None,
+    ) {
         Ok(_) => return None,
         _ => (),
     }
@@ -38,28 +45,28 @@ pub fn create_user(
 pub fn read_user(
     conn: &PgConnection,
     query_deleted: bool,
-    option_query_id: Option<i32>,
-    option_query_username: Option<String>,
-    option_query_email: Option<String>,
-    option_query_user_role: Option<i32>,
+    option_id: Option<i32>,
+    option_username: Option<String>,
+    option_email: Option<String>,
+    option_user_role: Option<i32>,
 ) -> QueryResult<User> {
     let mut query = users.into_boxed();
     if !query_deleted {
         query = query.filter(deleted_at.is_null())
     }
-    match option_query_id {
+    match option_id {
         Some(query_id) => query = query.filter(id.eq(query_id)),
         _ => (),
     }
-    match option_query_username {
+    match option_username {
         Some(query_username) => query = query.filter(username.eq(query_username)),
         _ => (),
     }
-    match option_query_email {
+    match option_email {
         Some(query_email) => query = query.filter(email.eq(query_email)),
         _ => (),
     }
-    match option_query_user_role {
+    match option_user_role {
         Some(query_user_role) => query = query.filter(user_role.eq(query_user_role)),
         _ => (),
     }
@@ -69,28 +76,28 @@ pub fn read_user(
 pub fn read_users(
     conn: &PgConnection,
     query_deleted: bool,
-    option_query_id: Option<i32>,
-    option_query_username: Option<String>,
-    option_query_email: Option<String>,
-    option_query_user_role: Option<i32>,
+    option_id: Option<i32>,
+    option_username: Option<String>,
+    option_email: Option<String>,
+    option_user_role: Option<i32>,
 ) -> QueryResult<Vec<User>> {
     let mut query = users.into_boxed();
     if !query_deleted {
         query = query.filter(deleted_at.is_null())
     }
-    match option_query_id {
+    match option_id {
         Some(query_id) => query = query.filter(id.eq(query_id)),
         _ => (),
     }
-    match option_query_username {
+    match option_username {
         Some(query_username) => query = query.filter(username.eq(query_username)),
         _ => (),
     }
-    match option_query_email {
+    match option_email {
         Some(query_email) => query = query.filter(email.eq(query_email)),
         _ => (),
     }
-    match option_query_user_role {
+    match option_user_role {
         Some(query_user_role) => query = query.filter(user_role.eq(query_user_role)),
         _ => (),
     }
