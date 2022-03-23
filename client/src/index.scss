@@ -1,0 +1,11 @@
+// import normalize sass
+// source : https://github.com/JohnAlbin/normalize-scss
+@import 'normalize';
+// overwrite initial sass variables here
+
+// initialize all normalization
+@include normalize();
+
+// custom sass
+
+
