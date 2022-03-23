@@ -1,5 +1,5 @@
 [package]
-name = "algorithmite-website"
+name = "algorithmite-website-server"
 version = "0.1.0"
 authors = ["algorithmite <algorithmite@gmail.com>"]
 edition = "2018"
@@ -17,11 +17,6 @@ rust-argon2 = "0.8"
 version = "0.1.0-rc.1"
 default-features = false
 features = ["diesel_postgres_pool"]
-
-[dependencies.rocket_dyn_templates]
-version = "0.1.0-rc.1"
-default-features = false
-features = ["handlebars"]
 
 [dev-dependencies]
 serial_test = "0.5.1"

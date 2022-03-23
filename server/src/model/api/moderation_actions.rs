@@ -48,11 +48,15 @@ pub fn read_moderation_action(
         _ => (),
     }
     match option_pre_action_role {
-        Some(query_pre_action_role) => query = query.filter(pre_action_role.eq(query_pre_action_role)),
+        Some(query_pre_action_role) => {
+            query = query.filter(pre_action_role.eq(query_pre_action_role))
+        }
         _ => (),
     }
     match option_moderation_action {
-        Some(query_moderation_action) => query = query.filter(moderation_action.eq(query_moderation_action)),
+        Some(query_moderation_action) => {
+            query = query.filter(moderation_action.eq(query_moderation_action))
+        }
         _ => (),
     }
     query.first(conn)
@@ -80,11 +84,15 @@ pub fn read_moderation_actions(
         _ => (),
     }
     match option_pre_action_role {
-        Some(query_pre_action_role) => query = query.filter(pre_action_role.eq(query_pre_action_role)),
+        Some(query_pre_action_role) => {
+            query = query.filter(pre_action_role.eq(query_pre_action_role))
+        }
         _ => (),
     }
     match option_moderation_action {
-        Some(query_moderation_action) => query = query.filter(moderation_action.eq(query_moderation_action)),
+        Some(query_moderation_action) => {
+            query = query.filter(moderation_action.eq(query_moderation_action))
+        }
         _ => (),
     }
     query.get_results(conn)
@@ -105,7 +113,8 @@ pub fn update_moderation_action(
             let mut final_moderator: i32 = query_role.moderator;
             let mut final_actor: i32 = query_role.actor;
             let mut final_pre_action_role: i32 = query_role.pre_action_role;
-            let mut final_moderation_action: ModerationActionTypes = query_role.moderation_action.clone();
+            let mut final_moderation_action: ModerationActionTypes =
+                query_role.moderation_action.clone();
 
             match option_moderator {
                 Some(query_moderator) => final_moderator = query_moderator,
@@ -141,7 +150,10 @@ pub fn update_moderation_action(
 
 //Delete
 
-pub fn delete_moderation_action(conn: &PgConnection, moderation_action_id: i32) -> QueryResult<ModerationAction> {
+pub fn delete_moderation_action(
+    conn: &PgConnection,
+    moderation_action_id: i32,
+) -> QueryResult<ModerationAction> {
     match read_moderation_action(conn, Some(moderation_action_id), None, None, None, None) {
         Ok(query_moderation_action) => diesel::delete(&query_moderation_action).get_result(conn),
         Err(e) => Err(e),
