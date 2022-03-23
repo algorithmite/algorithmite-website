@@ -1,0 +1,23 @@
+
+/* Install nvm for node and npm */
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+/* check for nvm install / should output nvm / restart bash if anything else */
+command -v nvm
+
+/* install node and npm */
+nvm install 16
+
+node -v
+npm -v
+
+
+npm install --global rollup
+
+
+rustup target add wasm32-unknown-unknown
+
+curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+cargo install wasm-pack
+
+
