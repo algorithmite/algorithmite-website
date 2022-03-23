@@ -13,11 +13,14 @@ npm -v
 
 
 npm install --global rollup
+npm install --global uglify-js
 
 
 rustup target add wasm32-unknown-unknown
 
+/* unix like systems get precompiled binaries here */
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+/* others compile using this command */
 cargo install wasm-pack
 
 
