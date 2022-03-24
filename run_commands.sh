@@ -6,10 +6,10 @@ cd client
 # replace --dev with --release for wasm minification
 wasm-pack build --target web --dev
 rollup -c
-uglifyjs -c -- ./pkg/bundle.js > ./www/bundle.min.js
+uglifyjs -c -- ./pkg/bundle.js > ./static/bundle.min.js
 
 sass ./src/index.scss ./pkg/bundle.css
-uglifycss ./pkg/bundle.css > ./www/bundle.min.css
+uglifycss ./pkg/bundle.css > ./static/bundle.min.css
 
 cd ..
 

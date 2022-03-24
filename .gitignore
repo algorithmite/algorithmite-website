@@ -12,9 +12,9 @@ target/
 Rocket.toml
 
 # Client program compiled package files
-client/pkg/*
-client/www/bundle.min.js
-client/www/bundle.min.css
+client/pkg
+client/static/bundle.min.js
+client/static/bundle.min.css
 
 # Windows
 
