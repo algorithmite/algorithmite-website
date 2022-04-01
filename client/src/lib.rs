@@ -3,6 +3,8 @@ use yew::prelude::*;
 
 mod structure;
 
+use structure::background::Background;
+
 pub struct App {
     value: i64,
 }
@@ -35,7 +37,7 @@ impl Component for App {
         let link = ctx.link();
         html! {
             <>
-                <div id="background-image" />
+                <Background />
                 <button onclick={link.callback(|_| Msg::AddOne)}>{ "+1" }</button>
                 <p>{ self.value }</p>
             </>
