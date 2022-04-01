@@ -34,10 +34,15 @@ impl Component for App {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         // This gives us a component's "`Scope`" which allows us to send messages, etc to the component.
-        let document = web_sys::window().unwrap().document().unwrap();
+        let body = web_sys::window()
+            .unwrap()
+            .document()
+            .unwrap()
+            .body()
+            .unwrap();
         html! {
             <>
-                <Background background_width=100 background_height=100 />
+                <Background background_width={ body.client_width() } background_height={ body.client_height() } />
                 <button onclick={ctx.link().callback(|_| Msg::AddOne)}>{ "+1" }</button>
                 <p>{ self.value }</p>
             </>
