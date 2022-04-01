@@ -1,8 +1,7 @@
 use gloo_render::{request_animation_frame, AnimationFrame};
 use wasm_bindgen::JsCast;
 use web_sys::{HtmlCanvasElement, WebGlRenderingContext};
-use yew::html::Scope;
-use yew::{html, Component, Context, Html, NodeRef};
+use yew::{html::Scope, prelude::*};
 
 pub enum Msg {
     Render(f64),
