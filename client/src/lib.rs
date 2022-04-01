@@ -1,6 +1,8 @@
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 
+mod structure;
+
 pub struct App {
     value: i64,
 }
@@ -14,9 +16,7 @@ impl Component for App {
     type Properties = ();
 
     fn create(_ctx: &Context<Self>) -> Self {
-        Self {
-            value: 0,
-        }
+        Self { value: 0 }
     }
 
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
@@ -34,10 +34,11 @@ impl Component for App {
         // This gives us a component's "`Scope`" which allows us to send messages, etc to the component.
         let link = ctx.link();
         html! {
-            <div>
+            <>
+                <div id="background-image" />
                 <button onclick={link.callback(|_| Msg::AddOne)}>{ "+1" }</button>
                 <p>{ self.value }</p>
-            </div>
+            </>
         }
     }
 }

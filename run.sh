@@ -4,6 +4,7 @@
 cd client
 
 # replace --dev with --release for wasm minification
+cargo fmt
 wasm-pack build --target web --dev
 rollup -c
 uglifyjs -c -- ./pkg/bundle.js > ./static/bundle.min.js
@@ -16,6 +17,7 @@ cd ..
 # compile and run server
 cd server
 
+cargo fmt
 cargo run
 
 cd ..
