@@ -50,24 +50,23 @@ impl Component for Background {
             Msg::MouseMove(x, y) => {
                 self.current_x = x as f32 / ctx.props().background_width as f32;
                 self.current_y = y as f32 / ctx.props().background_height as f32;
+                //console_log!(format!("{}, {}", self.current_x, self.current_y));
                 true
             }
         }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let on_mouse_move = ctx
-            .link()
-            .callback(|event: MouseEvent| Msg::MouseMove(event.client_x(), event.client_y()));
         html! {
-            <div>
-            <canvas onmousemove={ ctx
-                .link()
-                .callback(|event: MouseEvent| Msg::MouseMove(event.client_x(), event.client_y())) } id="background-canvas" ref={self.node_ref.clone()} />
-            <span>{ self.current_x }</span>
-            <br />
-            <span>{ self.current_y }</span>
-            </div>
+            <canvas
+                onmousemove={
+                    ctx
+                    .link()
+                    .callback(|event: MouseEvent| Msg::MouseMove(event.client_x(), event.client_y()))
+                }
+                id="background-canvas"
+                ref={self.node_ref.clone()}
+            />
         }
     }
 
