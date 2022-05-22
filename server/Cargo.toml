@@ -1,3 +1,5 @@
+cargo-features = ["edition2021"]
+
 [package]
 name = "algorithmite-website-server"
 version = "0.1.0"
@@ -5,7 +7,7 @@ authors = ["algorithmite <algorithmite@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-rocket = { version = "0.5.0-rc.1", features = ["secrets"] }
+rocket = { version = "0.5.0-rc.2", features = ["secrets"] }
 diesel = { version = "1.4", features = ["chrono", "network-address"] }
 diesel-derive-enum = { version = "1.1", features = ["postgres"] }
 serde = { version = "1.0", features = ["derive"] }
@@ -14,7 +16,7 @@ ipnetwork = "0.18"
 rust-argon2 = "0.8"
 
 [dependencies.rocket_sync_db_pools]
-version = "0.1.0-rc.1"
+version = "0.1.0-rc.2"
 default-features = false
 features = ["diesel_postgres_pool"]
 
