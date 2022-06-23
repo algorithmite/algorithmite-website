@@ -1,8 +1,8 @@
 use yew::prelude::*;
 
-pub struct Menu;
+pub struct Layout;
 
-impl Component for Menu {
+impl Component for Layout {
     type Message = ();
     type Properties = ();
 
@@ -13,7 +13,7 @@ impl Component for Menu {
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
             <>
-                <nav id="main-layout-menu"></nav>
+                <div id="main-layout-grid"></div>
             </>
         }
     }

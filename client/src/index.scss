@@ -20,20 +20,36 @@ html {
     background-color: $theme-background-medium;
 }
 
+#background-position-overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    height: 100vh;
+    width: 100vw;
+}
+
 #background-canvas {
     position: fixed;
     left: 0;
     top: 0;
-    z-index: -1;
+    z-index: 1;
     height: 100vh;
     width: 100vw;
+}
+
+#main-layout-menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 201;
 }
 
 #main-layout-grid {
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 1;
+    z-index: 101;
     height: 100vh;
     width: 100vw;
 }

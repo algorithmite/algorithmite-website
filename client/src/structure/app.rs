@@ -1,8 +1,9 @@
+use super::{background::Background, layout::Layout, menu::Menu};
 use yew::prelude::*;
 
-pub struct Menu;
+pub struct App;
 
-impl Component for Menu {
+impl Component for App {
     type Message = ();
     type Properties = ();
 
@@ -13,7 +14,9 @@ impl Component for Menu {
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
             <>
-                <nav id="main-layout-menu"></nav>
+                <Background/>
+                <Layout/>
+                <Menu/>
             </>
         }
     }

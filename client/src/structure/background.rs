@@ -2,38 +2,39 @@ use gloo_render::{request_animation_frame, AnimationFrame};
 use wasm_bindgen::JsCast;
 use web_sys::{HtmlCanvasElement, WebGlRenderingContext};
 use weblog::console_log;
-use yew::{html::Scope, prelude::*, props, Properties};
+use yew::{html::Scope, prelude::*};
 
 pub enum Msg {
     Render(f64),
-    MouseMove(i32, i32),
 }
 
 pub struct Background {
     gl: Option<WebGlRenderingContext>,
     node_ref: NodeRef,
     _render_loop: Option<AnimationFrame>,
-    current_x: f32,
-    current_y: f32,
-}
-
-#[derive(Properties, PartialEq)]
-pub struct BackgroundProps {
-    pub background_width: i32,
-    pub background_height: i32,
+    page_width: i32,
+    page_height: i32,
 }
 
 impl Component for Background {
     type Message = Msg;
-    type Properties = BackgroundProps;
+    type Properties = ();
 
     fn create(_ctx: &Context<Self>) -> Self {
+        let html = web_sys::window()
+            .unwrap()
+            .document()
+            .unwrap()
+            .body()
+            .unwrap()
+            .parent_element()
+            .unwrap();
         Self {
             gl: None,
             node_ref: NodeRef::default(),
             _render_loop: None,
-            current_x: 0.0,
-            current_y: 0.0,
+            page_width: html.client_width(),
+            page_height: html.client_height(),
         }
     }
 
@@ -47,26 +48,14 @@ impl Component for Background {
                 self.render_gl(timestamp, ctx.link());
                 false
             }
-            Msg::MouseMove(x, y) => {
-                self.current_x = x as f32 / ctx.props().background_width as f32;
-                self.current_y = y as f32 / ctx.props().background_height as f32;
-                console_log!(format!("{}, {}", self.current_x, self.current_y));
-                true
-            }
         }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
-            <canvas
-                onmousemove={
-                    ctx
-                    .link()
-                    .callback(|event: MouseEvent| Msg::MouseMove(event.client_x(), event.client_y()))
-                }
-                id="background-canvas"
-                ref={self.node_ref.clone()}
-            />
+            <>
+                <canvas id="background-canvas" ref={self.node_ref.clone()} />
+            </>
         }
     }
 
@@ -163,14 +152,5 @@ impl Background {
 
         // A reference to the new handle must be retained for the next render to run.
         self._render_loop = Some(handle);
-    }
-}
-
-impl BackgroundProps {
-    pub fn new_background_with_size(background_width: i32, background_height: i32) -> Self {
-        props! {BackgroundProps {
-            background_width,
-            background_height,
-        }}
     }
 }
