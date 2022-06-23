@@ -10,7 +10,7 @@ impl Component for Menu {
         Self {}
     }
 
-    fn view(&self, ctx: &Context<Self>) -> Html {
+    fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {
             <>
                 <nav id="main-layout-menu"></nav>

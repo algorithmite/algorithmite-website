@@ -1,7 +1,6 @@
 use gloo_render::{request_animation_frame, AnimationFrame};
 use wasm_bindgen::JsCast;
 use web_sys::{HtmlCanvasElement, WebGlRenderingContext};
-use weblog::console_log;
 use yew::{html::Scope, prelude::*};
 
 pub enum Msg {
@@ -51,7 +50,7 @@ impl Component for Background {
         }
     }
 
-    fn view(&self, ctx: &Context<Self>) -> Html {
+    fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {
             <>
                 <canvas id="background-canvas" ref={self.node_ref.clone()} />
